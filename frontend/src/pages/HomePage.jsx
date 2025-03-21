@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 function Home() {
   return (
     <div>
-      <Link to="/">homepage</Link>
+      <h1 className='text-white'>HOme page</h1>
     </div>
   )
 }

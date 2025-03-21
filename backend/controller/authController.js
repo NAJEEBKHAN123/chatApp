@@ -7,6 +7,7 @@ const cloudinary = require('../utils/cloudinary')
 
 const signup = async(req, res) =>{
     const {username, email, password} = req.body;
+    console.log("Received data:", req.body);
 
     try {
         if(!username || !email || !password){
