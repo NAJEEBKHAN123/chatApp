@@ -101,7 +101,7 @@ const logout = async(req, res) =>{
      }
 
      const uploadResponse = await cloudinary.uploader.upload(profilePic)
-     const uploadedUser = await User.findByIdAndUpdate(userId, {profilePic: uploadResponse.secure_url}, {new: ture})
+     const uploadedUser = await User.findByIdAndUpdate(userId, {profilePic: uploadResponse.secure_url}, {new: true})
 
      res.status(200).json(uploadedUser)
     } catch (error) {

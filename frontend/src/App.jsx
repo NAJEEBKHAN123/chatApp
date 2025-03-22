@@ -8,16 +8,17 @@ import ProfilePage from "./pages/ProfilePage";
 import Navbar from "./component/Navbar";
 import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import {Toaster} from 'react-hot-toast'
+import { Toaster } from "react-hot-toast";
+import { useThemeStore } from "./store/useThemeStore";
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
- const navigate = useNavigate();
+  const {theme} = useThemeStore()
+
   useEffect(() => {
     checkAuth();
+    document.documentElement.setAttribute("data-theme", "retro"); // ✅ Force theme on HTML
   }, [checkAuth]);
-  console.log("authUser",authUser);
 
   if (isCheckingAuth && !authUser)
     return (
@@ -27,17 +28,16 @@ function App() {
     );
 
   return (
-    <div className="bg-primary">
+    <div data-theme={theme}>
       <Navbar />
       <Routes>
-        <Route path="/" element={ authUser ? <HomePage /> : <Navigate to='/login'/>} />
-        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to='/'/>} />
-        <Route path="/login" element={!authUser ?  <LoginPage /> : <Navigate to='/'/>} />
+        <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
+        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
+        <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to='/login'/>} />
+        <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
       </Routes>
-
-      <Toaster/>
+      <Toaster />
     </div>
   );
 }
