@@ -2,6 +2,7 @@ const express = require('express');
 const DBconnection = require('./utils/db')
 const authRoutes = require('./router/authRouter')
 const messageRoutes = require('./router/messageRoutes')
+const path = require('path');
 
 const cors = require('cors')
 const dotenv = require('dotenv')
@@ -24,6 +25,7 @@ app.use(cors({
 app.use(cookieParser());
 
 const PORT = process.env.PORT || 3000
+const __dirname = path.resolve();
 
 
 app.get('/', (req, res) =>{
@@ -32,6 +34,15 @@ app.get('/', (req, res) =>{
 
 app.use('/api/auth', authRoutes)
 app.use('/api/messages', messageRoutes)
+
+if(process.env.NODE_ENV === "production"){
+    app.use(express.static(path.join(__dirname, "../frontend/dist")))
+
+
+    app.get("*", (req, res) =>{
+        res.sendFile(path.join(__dirname, '../frontend', "dist", "index.html"))
+    })
+}
 
 
 
