@@ -7,7 +7,6 @@ const cloudinary = require("../utils/cloudinary");
 
 const signup = async (req, res) => {
   const { username, email, password } = req.body;
-  console.log("Received data:", req.body);
 
   try {
     if (!username || !email || !password) {
@@ -128,7 +127,6 @@ const updateProfile = async (req, res) => {
 
 const checkAuth = async (req, res) => {
   try {
-    console.log("Authenticated User:", req.user);
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized - No user found" });
     }

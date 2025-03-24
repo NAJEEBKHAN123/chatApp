@@ -1,12 +1,12 @@
 const express = require('express');
 const DBconnection = require('./utils/db')
-const app = express();
 const authRoutes = require('./router/authRouter')
 const messageRoutes = require('./router/messageRoutes')
 
 const cors = require('cors')
 const dotenv = require('dotenv')
 const cookieParser = require('cookie-parser');
+const { app, server } = require('./utils/socket');
 dotenv.config()
 
 
@@ -36,6 +36,6 @@ app.use('/api/messages', messageRoutes)
 
 
 
-app.listen(PORT, () =>{
-    console.log(`Server is lestening on http://localhost:${PORT}`)
+server.listen(PORT, () =>{
+    console.log(`Server is runnig on http://localhost:${PORT}`)
 })
