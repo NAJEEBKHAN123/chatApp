@@ -6,7 +6,7 @@ import Sidebarr from "../component/Sidebarr";
 import { useChatStore } from "../store/useChatStore";
 
 const HomePage = () => {
-  const { selectedUser } = useChatStore;
+  const { selectedUser } = useChatStore();
  
 
   return (
