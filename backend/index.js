@@ -3,6 +3,7 @@ const DBconnection = require('./utils/db')
 const authRoutes = require('./router/authRouter')
 const messageRoutes = require('./router/messageRoutes')
 const path = require('path');
+const bodyParser = require("body-parser");
 
 const cors = require('cors')
 const dotenv = require('dotenv')
@@ -21,11 +22,15 @@ app.use(cors({
     credentials: true,
 }
     
+
 ));
+
 app.use(cookieParser());
+app.use(express.json({ limit: "10mb" })); // Increase payload limit
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 const PORT = process.env.PORT || 3000
-const __dirname = path.resolve();
+
 
 
 app.get('/', (req, res) =>{

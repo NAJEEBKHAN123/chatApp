@@ -1,32 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Camera, Mail, User } from "lucide-react";
 
 function ProfilePage() {
-  const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
-  const [selectedImage, setSelectedImage] = useState(null)
+  const { authUser, isUpdatingProfile, updateProfile, checkAuth, isCheckingAuth } = useAuthStore();
+  const [selectedImage, setSelectedImage] = useState(null);
+  
+  // Fetch authUser when component mounts
+  useEffect(() => {
+    checkAuth();  // Ensure authUser is fetched on first render
+  }, []);  // <-- Runs only once on mount
+
+  console.log("Auth User Data:", authUser);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-
-    if(!file) return;
+    if (!file) return;
+    
     const reader = new FileReader();
-
-    reader.readAsDataURL(file)
-    reader.onload = async() =>{
+    reader.readAsDataURL(file);
+    
+    reader.onload = async () => {
       const base64Image = reader.result;
-      setSelectedImage(base64Image)
-      await updateProfile({profilePic: base64Image})
-    }
+      setSelectedImage(base64Image);
+
+      // Ensure authUser is loaded before updating profile
+      if (authUser) {
+        await updateProfile({ profilePic: base64Image });
+      }
+    };
   };
+
+  if (isCheckingAuth) {
+    return <p className="text-center mt-10">Loading...</p>; // Show loading state while checking auth
+  }
 
   return (
     <div className="h-[600px] flex flex-col items-center pt-10 p-4">
-      {/* Always-Visible Heading */}
       <h1 className="text-xl font-semibold text-center mb-4">Profile</h1>
 
       <div className="w-full max-w-md bg-base-300 rounded-lg p-6 space-y-6">
-        {/* Avatar Upload Section */}
         <div className="flex flex-col items-center">
           <div className="relative">
             <img
@@ -54,9 +67,7 @@ function ProfilePage() {
             {isUpdatingProfile ? "Uploading..." : "Tap to change photo"}
           </p>
         </div>
-        
 
-        {/* User Info Section */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-zinc-400">
             <User className="w-4 h-4" /> <span>Username:</span>
@@ -69,7 +80,6 @@ function ProfilePage() {
           <p className="p-2 bg-base-200 rounded border">{authUser?.email || "N/A"}</p>
         </div>
 
-        {/* Account Information */}
         <div className="text-sm bg-base-200 p-4 rounded">
           <p className="flex justify-between border-b pb-2">
             <span>Member Since:</span>
